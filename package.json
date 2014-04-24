@@ -1,0 +1,27 @@
+{
+  "name": "d3.hexhex",
+  "version": "1.0.0",
+  "description": "Make a hexagon out of other hexagons in d3",
+  "main": "hexhex.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "say 'Run in your browser'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/indexzero/d3.hexhex.git"
+  },
+  "keywords": [
+    "d3",
+    "hexagons",
+    "layout"
+  ],
+  "author": "Charlie Robbins <charlie.robbins@gmail.com>",
+  "license": "Apache 2",
+  "bugs": {
+    "url": "https://github.com/indexzero/d3.hexhex/issues"
+  },
+  "homepage": "https://github.com/indexzero/d3.hexhex"
+}
