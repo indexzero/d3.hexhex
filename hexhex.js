@@ -9,8 +9,15 @@
         dx,
         dy;
 
-    function hexhex(height, c) {
-      var points = [],
+    function hexhex(options) {
+      if (typeof options === 'number') {
+        options = { height: options };
+      }
+
+      var height = options.height,
+          pad    = options.padding || options.pad || 0,
+          c      = options.center  || options.c,
+          points = [],
           counts = [],
           median,
           offset,
@@ -36,7 +43,7 @@
       for (var col = 0; col < height; col++) {
         count  = height;
         offset = {
-          x: 2 * r * col * Math.sin(Math.PI / 3),
+          x: (2 * r * col + (pad * col)) * Math.sin(Math.PI / 3),
           y: 0
         };
 
@@ -57,7 +64,7 @@
         for (var i = 0; i < count; i++) {
           points.push({
             x: c.x + offset.x,
-            y: c.y + offset.y + i * 2 * r,
+            y: c.y + offset.y + i * 2 * r + (pad * i),
             length: (Math.random() * 35) + 10
           })
         }

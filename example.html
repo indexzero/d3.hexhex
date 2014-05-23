@@ -58,7 +58,7 @@ var svg = d3.select("body")
 
 svg.append("g")
   .selectAll(".hexagon")
-    .data(hexhex(35))
+    .data(hexhex({ height: 35, pad: 4 }))
   .enter().append("path")
     .attr("class", "hexagon")
     .attr("d", hexhex.hexagon())
