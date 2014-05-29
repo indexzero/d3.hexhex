@@ -15,8 +15,6 @@
 
 .hexagon {
   fill: none;
-  stroke: #000;
-  stroke-width: .5px;
 }
 
 </style>
@@ -25,43 +23,62 @@
 <script src="/hexhex.js"></script>
 <script>
 
-var margin = {top: 20, right: 20, bottom: 30, left: 40},
-    width = 960 - margin.left - margin.right,
+var margin = { top: 20, right: 20, bottom: 30, left: 40 },
+    width  = 960 - margin.left - margin.right,
     height = 2000 - margin.top - margin.bottom;
 
-var randomX = d3.random.normal(width / 2, 80),
-    randomY = d3.random.normal(height / 2, 80),
-    points = d3.range(2000).map(function() { return [randomX(), randomY()]; });
+var constants = {
+  height: 9,
+  pad: 0,
+  radius: 20,
+  size: true
+};
 
 var color = d3.scale.linear()
     .domain([0, 20])
     .range(["white", "steelblue"])
     .interpolate(d3.interpolateLab);
 
+var radius = d3.scale.pow()
+    .exponent(0.8)
+    .domain([0, 0.035])
+    .range([0, constants.radius * 1.4]);
+
 var hexhex = d3.hexhex()
     .size([width, height])
-    .radius(30);
+    .radius(constants.radius);
 
-var x = d3.scale.identity()
-    .domain([0, width]);
+var x = d3.scale.pow()
+    .exponent(1.1)
+    .domain([0, width])
+    .range([0, width * 0.9]);
 
-var y = d3.scale.linear()
+var y = d3.scale.pow()
+    .exponent(1)
     .domain([0, height])
-    .range([height, 0]);
+    .range([0, height * 0.7]);
 
 var svg = d3.select("body")
   .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("width",  width  + margin.left + margin.right)
+    .attr("height", height + margin.top  + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+var points = hexhex({ height: constants.height, pad: constants.pad }),
+    cp = points[points.length / 2 | 0];
+
 svg.append("g")
   .selectAll(".hexagon")
-    .data(hexhex({ height: 10, pad: 8 }))
+    .data(points)
   .enter().append("path")
     .attr("class", "hexagon")
-    .attr("d", hexhex.hexagon())
+    .attr("d", function (d) {
+      return constants.size
+        ? hexhex.hexagon(radius(d.size))
+        : hexhex.hexagon();
+    })
     .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-    .style("fill", function(d) { return color(d.length); });
+    // .attr("transform", function(d) { return "translate(" + (x(d.x - cp.x) + 350) + "," + (y(d.y - cp.y) + 350) + ")"; })
+    .style("fill", function(d) { return color(d.value); });
 </script>

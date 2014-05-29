@@ -19,6 +19,7 @@
           c      = options.center  || options.c,
           points = [],
           counts = [],
+          origin,
           median,
           offset,
           count;
@@ -34,6 +35,7 @@
       height = height || 11;
       if (height % 2 === 0) { height += 1; }
       median = Math.floor(height / 2);
+      origin = { x: median, y: median };
 
       //
       // We calculate the layout based on the height because
@@ -63,14 +65,40 @@
 
         for (var i = 0; i < count; i++) {
           points.push({
-            x: c.x + offset.x,
-            y: c.y + offset.y + i * 2 * r + (pad * i),
-            length: (Math.random() * 35) + 10
-          })
+            x:      c.x + offset.x,
+            y:      c.y + offset.y + i * 2 * r + (pad * i),
+            //
+            // TODO: This random number really serves no purpose but
+            // to provide some color for perspective
+            //
+            value: (Math.random() * 35) + 10,
+          });
         }
       }
 
-      return points;
+      //
+      // Get the "center" point which will always be
+      // the exact middle of the list of points.
+      //
+      var cp = points[points.length / 2 | 0];
+      cp = { x: cp.x, y: cp.y };
+
+      return points.map(function (p, i) {
+        //
+        // Distance between two points
+        // http://www.purplemath.com/modules/distform.htm
+        //
+        p.distance = Math.sqrt(
+          Math.pow(cp.x - p.x, 2) +
+          Math.pow(cp.y - p.y, 2)
+        );
+
+        p.size = p.distance !== 0
+          ? 1 / (1 + p.distance)
+          : points[i - 1].size;
+
+        return p;
+      });
     }
 
     function hexagon(radius) {
