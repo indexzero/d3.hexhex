@@ -22,7 +22,7 @@
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="/hexhex2.js"></script>
+<script src="../hexhex.js"></script>
 <script>
 
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
@@ -58,7 +58,7 @@ var svg = d3.select("body")
 
 svg.append("g")
   .selectAll(".hexagon")
-    .data(hexhex({ height: 10, pad: 10 }))
+    .data(hexhex({ height: 10, pad: 8 }))
   .enter().append("path")
     .attr("class", "hexagon")
     .attr("d", hexhex.hexagon())
